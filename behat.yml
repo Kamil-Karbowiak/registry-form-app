@@ -1,0 +1,16 @@
+default:
+    autoload:
+        '': '%paths.base%/tests/Behat/Context/'
+    suites:
+        default:
+            paths: [ "%paths.base%/tests/Behat/Feature/default" ]
+            contexts:
+                - App\Tests\Behat\Context\UserContext
+                - App\Tests\Behat\Context\ApiContext
+
+    extensions:
+        FriendsOfBehat\SymfonyExtension:
+            kernel:
+                environment: test
+                class: App\Kernel
+            bootstrap: tests/bootstrap.php
