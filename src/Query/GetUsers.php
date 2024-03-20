@@ -19,8 +19,6 @@ final class GetUsers implements Query
 
     public function execute(int $pageNr): iterable
     {
-        $offset = ($pageNr - 1) * Query::PAGE_SIZE;
-
         $developers = $this->developerRepository->findAll();
         $testers = $this->testerRepository->findAll();
         $projectManagers = $this->projectManagerRepository->findAll();

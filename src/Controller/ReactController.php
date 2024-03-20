@@ -8,12 +8,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DefaultController extends AbstractController
+class ReactController extends AbstractController
 {
-    #[Route('/', name: 'default_index')]
+    #[Route('/', name: 'default_main')]
     public function index(): Response
     {
-        return $this->render('default/index.html.twig');
+        return $this->render('default/main.html.twig');
     }
 
     #[Route('/admin', name: 'default_admin')]

@@ -19,7 +19,7 @@ class Developer extends User
     protected string $programmingLanguages;
 
     #[ORM\Column]
-    protected bool $hasMySQLknowledge;
+    protected bool $hasMysqlKnowledge;
 
     public function __construct(
         ?string $id,
@@ -30,12 +30,12 @@ class Developer extends User
         ?string $description,
         string $integratedDevelopmentEnvironments,
         string $programmingLanguages,
-        bool $hasMySQLknowledge
+        bool $hasMysqlKnowledge
     ) {
         parent::__construct($id, $firstName, $lastName, $email, $jobPosition, $description);
         $this->integratedDevelopmentEnvironments = $integratedDevelopmentEnvironments;
         $this->programmingLanguages = $programmingLanguages;
-        $this->hasMySQLknowledge = $hasMySQLknowledge;
+        $this->hasMysqlKnowledge = $hasMysqlKnowledge;
     }
 
     #[Override]
@@ -61,8 +61,8 @@ class Developer extends User
         return $this->programmingLanguages;
     }
 
-    public function hasMySQLknowledge(): bool
+    public function hasMysqlKnowledge(): bool
     {
-        return $this->hasMySQLknowledge;
+        return $this->hasMysqlKnowledge;
     }
 }
