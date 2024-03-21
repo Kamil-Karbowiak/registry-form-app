@@ -1,0 +1,38 @@
+{
+  "entrypoints": {
+    "admin": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors-node_modules_react-dom_client_js-node_modules_sweetalert2_dist_sweetalert2_all_js-nod-6941ac.js",
+        "/build/assets_js_api_js-assets_js_components_Form_js.js",
+        "/build/admin.js"
+      ]
+    },
+    "main": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors-node_modules_react-dom_client_js-node_modules_sweetalert2_dist_sweetalert2_all_js-nod-6941ac.js",
+        "/build/assets_js_api_js-assets_js_components_Form_js.js",
+        "/build/main.js"
+      ]
+    },
+    "main-style": {
+      "js": [
+        "/build/runtime.js",
+        "/build/main-style.js"
+      ],
+      "css": [
+        "/build/main-style.css"
+      ]
+    },
+    "admin-style": {
+      "js": [
+        "/build/runtime.js",
+        "/build/admin-style.js"
+      ],
+      "css": [
+        "/build/admin-style.css"
+      ]
+    }
+  }
+}
