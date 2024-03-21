@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Behat\Context;
 
+use App\Entity\Admin;
 use App\Entity\Developer;
 use App\Entity\ProjectManager;
 use App\Entity\Tester;
@@ -36,10 +37,33 @@ final class UserContext implements Context
     }
 
     /**
+     * @Given /^there are admin$/
+     */
+    public function thereAreAdmin()
+    {
+        $admin = new Admin(
+            'dea3c540-4ba2-4036-8866-038a3091dc2c',
+             'admin',
+             'admin',
+            'admin',
+            'admin',
+            null
+        );
+
+        $admin
+            ->setToken("4nnFDkRKckomrMCq951d")
+            ->setRoles(['ADMIN']);
+
+        $this->entityManager->persist($admin);
+        $this->entityManager->flush();
+    }
+
+    /**
      * @Given /^there are developers:$/
      */
     public function thereAreDevelopers(TableNode $table)
     {
+
         foreach ($table->getColumnsHash() as $row) {
             $dev = new Developer(
                 $row['id'],

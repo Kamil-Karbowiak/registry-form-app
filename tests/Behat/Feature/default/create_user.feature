@@ -1,12 +1,12 @@
 Feature: Create user
 
   Scenario: Happy path
-    When I send a POST request to "/users" with body:
+    When I send a POST request to "/api/users" with body:
     """
       {
           "first_name": "Tester",
           "last_name": "Testowy",
-          "email": "test@wp.pl",
+          "email": "test10@wp.pl",
           "job_position": "developer",
           "skills": {
               "integrated_development_environments": "PhpStorm",
@@ -18,7 +18,7 @@ Feature: Create user
     Then the response code is 204
 
   Scenario: Validation - schema
-    When I send a POST request to "/users" with body:
+    When I send a POST request to "/api/users" with body:
     """
       {
           "first_name": "Tester",

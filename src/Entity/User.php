@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping\Id;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\InheritanceType('JOINED')]
@@ -21,6 +22,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
     'developer' => Developer::class,
     'project-manager' => ProjectManager::class,
     'tester' => Tester::class,
+    'admin' => Admin::class
 ])]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -44,19 +46,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     protected ?string $description = null;
 
-    /**
-     * @var list<string> The user roles
-     */
+    #[Ignore]
     #[ORM\Column]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
-    #[ORM\Column]
+    #[Ignore]
+    #[ORM\Column(nullable: true)]
     private ?string $password = null;
 
-    #[ORM\Column(length: 100)]
+    #[Ignore]
+    #[ORM\Column(length: 100, nullable: true)]
     private string $token;
 
     public function __construct(
@@ -84,11 +83,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         ! isset($command->description) ?: $this->description = $command->description;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
+    #[Ignore]
     public function getUserIdentifier(): string
     {
         return (string) $this->email;

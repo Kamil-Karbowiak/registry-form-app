@@ -14,6 +14,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 final class ApiContext implements Context
 {
     private Response $response;
+    private array $headers = [];
 
     public function __construct(
         private KernelInterface $kernel
@@ -34,12 +35,22 @@ final class ApiContext implements Context
     }
 
     /**
+     * @When /^I add "([^"]*)" header equal to "([^"]*)"$/
+     */
+    public function iAddHeaderEqualTo($arg1, $arg2)
+    {
+        $this->headers[$arg1] = $arg2;
+    }
+
+
+    /**
      * @When I send a :method request to :path with body:
      */
     public function iSendMethodRequestWithBody(string $method, string $path, PyStringNode $content): Response
     {
         return $this->response = $this->kernel->handle($this->request($path, $method, $content->getRaw()));
     }
+
 
     /**
      * @Then the response code is :code
@@ -62,9 +73,8 @@ final class ApiContext implements Context
         string $method,
         ?string $body = null
     ): Request {
-        $headers = [
-            'CONTENT_TYPE' => 'application/json',
-        ];
+
+        $this->headers['CONTENT_TYPE'] = 'application/json';
 
         return Request::create(
             $path,
@@ -72,7 +82,7 @@ final class ApiContext implements Context
             [],
             [],
             [],
-            $headers,
+            $this->headers,
             $body
         );
     }
