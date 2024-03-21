@@ -8,6 +8,7 @@ final readonly class CreateUser implements Command
 {
     public function __construct(
         public string $userId,
+        public string $plainPassword,
         public string $firstName,
         public string $lastName,
         public string $email,

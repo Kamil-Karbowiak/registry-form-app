@@ -9,6 +9,7 @@ use App\Command\RemoveUser;
 use App\Command\SendNotification;
 use App\Command\UpdateUser;
 use App\Controller\Traits\FormErrorsTrait;
+use App\Exception\EmailAlreadyTakenException;
 use App\Exception\NotFoundException;
 use App\Form\Handler\InvalidFormException;
 use App\Form\UserType;
@@ -18,8 +19,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\{Exception\BadRequestException, JsonResponse, Request, Response};
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\String\ByteString;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserController extends AbstractController
@@ -30,12 +33,13 @@ class UserController extends AbstractController
     public function __construct(
         private readonly SerializerInterface $serializer,
         private readonly TranslatorInterface $translator,
+        private readonly UserPasswordHasherInterface $passwordHasher,
         MessageBusInterface $messageBus,
     ) {
         $this->messageBus = $messageBus;
     }
 
-    #[Route('/users', name: 'user_index', methods: ['GET'])]
+    #[Route('/api/users', name: 'user_index', methods: ['GET'])]
     public function index(Request $request, GetUsers $query): Response
     {
         try {
@@ -59,7 +63,7 @@ class UserController extends AbstractController
         }
     }
 
-    #[Route('/users', name: 'user_create', methods: ['POST'])]
+    #[Route('/api/users', name: 'user_create', methods: ['POST'])]
     public function create(Request $request): Response
     {
         try {
@@ -74,9 +78,11 @@ class UserController extends AbstractController
 
             $formData = $form->getData();
             $userId = Uuid::uuid7()->toString();
+            $plainPassword = ByteString::fromRandom(12)->toString();
 
             $this->handle(new CreateUser(
                 $userId,
+                $plainPassword,
                 $formData['first_name'],
                 $formData['last_name'],
                 $formData['email'],
@@ -86,7 +92,8 @@ class UserController extends AbstractController
             ));
 
             $this->handle(new SendNotification(
-                $userId
+                $userId,
+                $plainPassword
             ));
 
             return new JsonResponse([], Response::HTTP_NO_CONTENT);
@@ -95,10 +102,14 @@ class UserController extends AbstractController
                 'message' => $this->translator->trans('form_contains_errors', [], 'validators'),
                 'errors' => $this->getErrorsFromForm($e->getForm()),
             ], Response::HTTP_BAD_REQUEST);
+        } catch (EmailAlreadyTakenException $e) {
+            return new JsonResponse([
+                'message' => $e->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 
-    #[Route('/users/{uuid}', name: 'user_update', methods: ['PATCH'])]
+    #[Route('/api/users/{uuid}', name: 'user_update', methods: ['PATCH'])]
     public function update(string $uuid, Request $request): Response
     {
         try {
@@ -136,7 +147,7 @@ class UserController extends AbstractController
         }
     }
 
-    #[Route('/users/{uuid}', name: 'user_delete', methods: ['DELETE'])]
+    #[Route('/api/users/{uuid}', name: 'user_delete', methods: ['DELETE'])]
     public function delete(string $uuid): Response
     {
         try {

@@ -21,6 +21,6 @@ final class SendNotificationHandler implements MessageHandlerInterface
     public function __invoke(SendNotification $command): void
     {
         $user = $this->entityManager->getReference(User::class, $command->userId);
-        $this->notification->sendNotification($user);
+        $this->notification->sendNotification($user, $command->plainPassword);
     }
 }

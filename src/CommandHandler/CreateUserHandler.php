@@ -10,21 +10,35 @@ use App\Entity\ProjectManager;
 use App\Entity\Tester;
 use App\Entity\User;
 use App\Enum\JobPosition;
+use App\Exception\EmailAlreadyTakenException;
 use App\Repository\UserRepository;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class CreateUserHandler implements MessageHandlerInterface
 {
     public function __construct(
-        private readonly UserRepository $userRepository
+        private readonly UserRepository $userRepository,
+        private readonly UserPasswordHasherInterface $passwordHasher
     ) {
     }
 
     public function __invoke(CreateUser $command): void
     {
+        $isEmailAlreadyTaken = !empty($this->userRepository->findByEmail($command->email));
+
+        if ($isEmailAlreadyTaken) {
+            throw new EmailAlreadyTakenException("Adres email jest już zajęty");
+        }
+
         $user = $this->createUser($command);
+        $hashedPassword = $this->passwordHasher->hashPassword(
+            $user,
+            $command->plainPassword
+        );
+
+        $user->setPassword($hashedPassword);
         $this->userRepository->save($user);
-        // MAILER
     }
 
     private function createUser(CreateUser $command): User

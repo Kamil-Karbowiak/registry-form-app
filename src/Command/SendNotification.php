@@ -7,7 +7,8 @@ namespace App\Command;
 final readonly class SendNotification implements Command
 {
     public function __construct(
-        public string $userId
+        public string $userId,
+        public string $plainPassword
     ) {
     }
 }

@@ -8,5 +8,5 @@ use App\Entity\User;
 
 interface NotificationInterface
 {
-    public function sendNotification(User $user): void;
+    public function sendNotification(User $user, string $plainPassword): void;
 }

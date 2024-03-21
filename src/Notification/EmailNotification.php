@@ -17,14 +17,17 @@ class EmailNotification implements NotificationInterface
     {
     }
 
-    public function sendNotification(User $user): void
+    public function sendNotification(User $user, string $plainPassword): void
     {
         $email = (new TemplatedEmail())
             ->from(new Address($this->fromEmail))
             ->to(new Address($user->getEmail()))
             ->subject('Potwierdzenie rejestracji')
             ->htmlTemplate('email/notification.html.twig')
-            ->context(['user' => $user]);
+            ->context([
+                'user' => $user,
+                'plainPassword' => $plainPassword
+            ]);
 
         $this->mailer->send($email);
     }
