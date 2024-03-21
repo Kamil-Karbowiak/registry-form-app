@@ -3,9 +3,9 @@ import TesterFields from "./TesterFields";
 import DeveloperFields from "./DeveloperFields";
 import ProjectManagerFields from "./ProjectManagerFields";
 
-function JobPosition({ onChange, user = null, isEditMode = false  }) {
+const JobPosition = ({ onChange, user = null, isEditMode = false  }) => {
     const [jobPosition, setJobPosition] = useState(isEditMode ? user.job_position : '');
-    const [skills, setSkills] = useState({});
+    const [skills, setSkills] = useState(isEditMode ? user.skills : {});
 
     const handleSelectChange = (name, position) => {
         setJobPosition(position);

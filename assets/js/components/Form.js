@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import JobPosition from './JobPosition';
 
-function Form({onSave, isEditMode = false, user = null, onBack = null}) {
+const Form = ({onSave, isEditMode = false, user = null, onBack = null}) => {
 
-    const [inputs, setInputs] = useState({});
+    const [inputs, setInputs] = useState(user);
 
     const handleChange = (name, value) => {
         setInputs(values => ({...values, [name]: value}));

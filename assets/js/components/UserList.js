@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import Form from "./Form";
 
-const UserList = ({ users, isEditMode = false }) => {
+const UserList = ({onSave, onDelete, users, isEditMode = false }) => {
     const [showDetails, setShowDetails] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
 
-    const handleEdit = (user) => {
+    const handleEditView = (user) => {
         setSelectedUser(user);
         setShowDetails(true);
     };
@@ -40,8 +40,8 @@ const UserList = ({ users, isEditMode = false }) => {
                         <td>{user.job_position}</td>
                         <td>
                             <div className="btn-group" role="group" aria-label="Akcje">
-                                <button type="button" className="btn btn-sm btn-primary" onClick={() => handleEdit(user)}>Edycja</button>
-                                <button type="button" className="btn btn-sm btn-danger">Usuń</button>
+                                <button type="button" className="btn btn-sm btn-primary" onClick={() => handleEditView(user)}>Edycja</button>
+                                <button type="button" className="btn btn-sm btn-danger" onClick={() => onDelete(user.id)}>Usuń</button>
                             </div>
                         </td>
                     </tr>
@@ -50,7 +50,7 @@ const UserList = ({ users, isEditMode = false }) => {
                 </table>
             </>
             ) : (
-                <Form isEditMode={isEditMode} user={selectedUser} onBack={handleBack} onSave={handleEdit}/>
+                <Form isEditMode={isEditMode} user={selectedUser} onBack={handleBack} onSave={onSave}/>
             )}
         </>
 )

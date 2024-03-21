@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import UserList from './UserList';
 import { getUsers } from '../api';
 
-const Dashboard = () => {
+const Dashboard = ({onSave, onDelete}) => {
     const [users, setUsers] = useState([]);
-
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -16,7 +15,7 @@ const Dashboard = () => {
 
     return (
         <div className={'container-fluid dashboard-container'}>
-            <UserList users={users} isEditMode={true}/>
+            <UserList onSave={onSave} onDelete={onDelete} users={users} isEditMode={true}/>
         </div>
     );
 };
