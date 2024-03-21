@@ -7,17 +7,20 @@ namespace App\Entity;
 use App\Command\UpdateUser;
 use App\Repository\DeveloperRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Override;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: DeveloperRepository::class)]
 class Developer extends User
 {
+    #[Ignore]
     #[ORM\Column(length: 255)]
     protected string $integratedDevelopmentEnvironments;
 
+    #[Ignore]
     #[ORM\Column(length: 255)]
     protected string $programmingLanguages;
 
+    #[Ignore]
     #[ORM\Column]
     protected bool $hasMysqlKnowledge;
 
@@ -38,7 +41,7 @@ class Developer extends User
         $this->hasMysqlKnowledge = $hasMysqlKnowledge;
     }
 
-    #[Override]
+    #[\Override]
     public function updateFromCommand(UpdateUser $command): void
     {
         ! isset($command->firstName) ?: $this->firstName = $command->firstName;
@@ -49,6 +52,15 @@ class Developer extends User
         ! isset($command->skills['integrated_development_environments']) ?: $this->integratedDevelopmentEnvironments = $command->skills['integrated_development_environments'];
         ! isset($command->skills['programming_languages']) ?: $this->programmingLanguages = $command->skills['programming_languages'];
         ! isset($command->skills['has_mysql_knowledge']) ?: $this->hasMySQLknowledge = $command->skills['has_mysql_knowledge'];
+    }
+
+    public function getSkills(): iterable
+    {
+        return [
+            'integrated_development_environments' => $this->integratedDevelopmentEnvironments,
+            'programming_languages' => $this->programmingLanguages,
+            'has_mysql_knowledge' => $this->hasMysqlKnowledge
+        ];
     }
 
     public function getIntegratedDevelopmentEnvironments(): string

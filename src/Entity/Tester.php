@@ -7,16 +7,20 @@ namespace App\Entity;
 use App\Command\UpdateUser;
 use App\Repository\TesterRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: TesterRepository::class)]
 class Tester extends User
 {
+    #[Ignore]
     #[ORM\Column(length: 255)]
     protected string $testingSystems;
 
+    #[Ignore]
     #[ORM\Column(length: 255)]
     protected string $reportingSystems;
 
+    #[Ignore]
     #[ORM\Column]
     protected bool $hasSeleniumKnowledge;
 
@@ -37,6 +41,7 @@ class Tester extends User
         $this->hasSeleniumKnowledge = $hasSeleniumKnowledge;
     }
 
+    #[\Override]
     public function updateFromCommand(UpdateUser $command): void
     {
         ! isset($command->firstName) ?: $this->firstName = $command->firstName;
@@ -47,6 +52,15 @@ class Tester extends User
         ! isset($command->skills['testing_systems']) ?: $this->testingSystems = $command->skills['testing_systems'];
         ! isset($command->skills['reporting_systems']) ?: $this->reportingSystems = $command->skills['reporting_systems'];
         ! isset($command->skills['has_selenium_knowledge']) ?: $this->hasSeleniumKnowledge = $command->skills['has_selenium_knowledge'];
+    }
+
+    public function getSkills(): iterable
+    {
+        return [
+            'testing_systems' => $this->testingSystems,
+            'reporting_systems' => $this->reportingSystems,
+            'has_selenium_knowledge' => $this->hasSeleniumKnowledge
+        ];
     }
 
     public function getTestingSystems(): string

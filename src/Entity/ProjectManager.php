@@ -7,16 +7,20 @@ namespace App\Entity;
 use App\Command\UpdateUser;
 use App\Repository\ProjectManagerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: ProjectManagerRepository::class)]
 class ProjectManager extends User
 {
+    #[Ignore]
     #[ORM\Column(length: 255)]
     protected string $projectMethodologies;
 
+    #[Ignore]
     #[ORM\Column(length: 255)]
     protected string $reportingSystems;
 
+    #[Ignore]
     #[ORM\Column]
     protected bool $hasScrumKnowledge;
 
@@ -37,6 +41,7 @@ class ProjectManager extends User
         $this->hasScrumKnowledge = $hasScrumKnowledge;
     }
 
+    #[\Override]
     public function updateFromCommand(UpdateUser $command): void
     {
         ! isset($command->firstName) ?: $this->firstName = $command->firstName;
@@ -47,6 +52,15 @@ class ProjectManager extends User
         ! isset($command->skills['project_methodologies']) ?: $this->projectMethodologies = $command->skills['project_methodologies'];
         ! isset($command->skills['reporting_systems']) ?: $this->reportingSystems = $command->skills['reporting_systems'];
         ! isset($command->skills['has_scrum_knowledge']) ?: $this->hasScrumKnowledge = $command->skills['has_scrum_knowledge'];
+    }
+
+    public function getSkills(): iterable
+    {
+        return [
+            'project_methodologies' => $this->projectMethodologies,
+            'reporting_systems' => $this->reportingSystems,
+            'has_scrum_knowledge' => $this->hasScrumKnowledge
+        ];
     }
 
     public function getProjectMethodologies(): string
