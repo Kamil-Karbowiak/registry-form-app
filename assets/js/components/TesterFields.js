@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 function TesterFields({onChange, isEditMode = false, user= null }) {
 
     const [isSeleniumKnowsChecked, setIsSeleniumKnowsChecked] = useState(() => {
-        return isEditMode ? user.knows_selenium : false;
+        return isEditMode ? user.has_selenium_knowledge : false;
     });
 
     const handleSeleniumCheckboxChange = (e) => {

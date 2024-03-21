@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 function ProjectManagerFields({onChange, isEditMode = false, user = null }) {
 
     const [isScrumKnowsChecked, setIsScrumKnowsChecked] = useState(() => {
-        return isEditMode ? user.knows_scrum : false;
+        return isEditMode ? user.has_scrum_knowledge : false;
     });
 
     const handleScrumCheckboxChange = (e) => {

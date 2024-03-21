@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 function DeveloperFields({onChange, isEditMode = false, user = null }) {
 
     const [isMysqlKnowsChecked, setIsMysqlKnowsChecked] = useState(() => {
-        return isEditMode ? user.knows_mysql : false;
+        return isEditMode ? user.has_mysql_knowledge : false;
     });
 
     const handleMysqlCheckboxChange = (e) => {
