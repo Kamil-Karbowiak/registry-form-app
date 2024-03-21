@@ -6,12 +6,14 @@ namespace App\Controller\Api;
 
 use App\Command\CreateUser;
 use App\Command\RemoveUser;
+use App\Command\SendNotification;
 use App\Command\UpdateUser;
 use App\Controller\Traits\FormErrorsTrait;
 use App\Exception\NotFoundException;
 use App\Form\Handler\InvalidFormException;
 use App\Form\UserType;
 use App\Query\GetUsers;
+use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\{Exception\BadRequestException, JsonResponse, Request, Response};
 use Symfony\Component\Messenger\HandleTrait;
@@ -71,14 +73,20 @@ class UserController extends AbstractController
             }
 
             $formData = $form->getData();
+            $userId = Uuid::uuid7()->toString();
 
             $this->handle(new CreateUser(
+                $userId,
                 $formData['first_name'],
                 $formData['last_name'],
                 $formData['email'],
                 $formData['job_position'],
                 $formData['skills'],
                 $formData['description'] ?? null
+            ));
+
+            $this->handle(new SendNotification(
+                $userId
             ));
 
             return new JsonResponse([], Response::HTTP_NO_CONTENT);

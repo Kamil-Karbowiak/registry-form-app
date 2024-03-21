@@ -19,3 +19,8 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
+    App\Notification\EmailNotification:
+        arguments:
+            $fromEmail: 'powiadomienie@registry-app.pl'
+            $subject: 'Informacja o rejestracji'

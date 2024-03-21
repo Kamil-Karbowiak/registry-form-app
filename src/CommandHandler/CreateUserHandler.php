@@ -31,7 +31,7 @@ final class CreateUserHandler implements MessageHandlerInterface
     {
         return match ($command->jobPosition) {
             JobPosition::Developer->value => new Developer(
-                null,
+                $command->userId,
                 $command->firstName,
                 $command->lastName,
                 $command->email,
@@ -42,7 +42,7 @@ final class CreateUserHandler implements MessageHandlerInterface
                 $command->skills['has_mysql_knowledge']
             ),
             JobPosition::Tester->value => new Tester(
-                null,
+                $command->userId,
                 $command->firstName,
                 $command->lastName,
                 $command->email,
@@ -53,7 +53,7 @@ final class CreateUserHandler implements MessageHandlerInterface
                 $command->skills['has_selenium_knowledge']
             ),
             JobPosition::ProjectManager->value => new ProjectManager(
-                null,
+                $command->userId,
                 $command->firstName,
                 $command->lastName,
                 $command->email,

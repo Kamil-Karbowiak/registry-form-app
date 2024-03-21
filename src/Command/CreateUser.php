@@ -7,6 +7,7 @@ namespace App\Command;
 final readonly class CreateUser implements Command
 {
     public function __construct(
+        public string $userId,
         public string $firstName,
         public string $lastName,
         public string $email,
