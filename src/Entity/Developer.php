@@ -61,7 +61,7 @@ class Developer extends User
         return $this->programmingLanguages;
     }
 
-    public function hasMysqlKnowledge(): bool
+    public function isHasMysqlKnowledge(): bool
     {
         return $this->hasMysqlKnowledge;
     }
