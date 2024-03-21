@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}ADMIN{% endblock %}
-
+{% block stylesheets %}
+    {{ encore_entry_link_tags('admin-style') }}
+{% endblock %}
 {% block body %}
     <div id="root"></div>
     {% block javascripts %}
