@@ -104,7 +104,7 @@ class UserController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         } catch (EmailAlreadyTakenException $e) {
             return new JsonResponse([
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], Response::HTTP_BAD_REQUEST);
         }
     }

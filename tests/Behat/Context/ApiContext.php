@@ -14,6 +14,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 final class ApiContext implements Context
 {
     private Response $response;
+
     private array $headers = [];
 
     public function __construct(
@@ -42,7 +43,6 @@ final class ApiContext implements Context
         $this->headers[$arg1] = $arg2;
     }
 
-
     /**
      * @When I send a :method request to :path with body:
      */
@@ -50,7 +50,6 @@ final class ApiContext implements Context
     {
         return $this->response = $this->kernel->handle($this->request($path, $method, $content->getRaw()));
     }
-
 
     /**
      * @Then the response code is :code
@@ -73,7 +72,6 @@ final class ApiContext implements Context
         string $method,
         ?string $body = null
     ): Request {
-
         $this->headers['CONTENT_TYPE'] = 'application/json';
 
         return Request::create(

@@ -25,10 +25,10 @@ final class CreateUserHandler implements MessageHandlerInterface
 
     public function __invoke(CreateUser $command): void
     {
-        $isEmailAlreadyTaken = !empty($this->userRepository->findByEmail($command->email));
+        $isEmailAlreadyTaken = ! empty($this->userRepository->findByEmail($command->email));
 
         if ($isEmailAlreadyTaken) {
-            throw new EmailAlreadyTakenException("Adres email jest już zajęty");
+            throw new EmailAlreadyTakenException('Adres email jest już zajęty');
         }
 
         $user = $this->createUser($command);
@@ -44,39 +44,9 @@ final class CreateUserHandler implements MessageHandlerInterface
     private function createUser(CreateUser $command): User
     {
         return match ($command->jobPosition) {
-            JobPosition::Developer->value => new Developer(
-                $command->userId,
-                $command->firstName,
-                $command->lastName,
-                $command->email,
-                $command->jobPosition,
-                $command->description,
-                $command->skills['integrated_development_environments'],
-                $command->skills['programming_languages'],
-                $command->skills['has_mysql_knowledge']
-            ),
-            JobPosition::Tester->value => new Tester(
-                $command->userId,
-                $command->firstName,
-                $command->lastName,
-                $command->email,
-                $command->jobPosition,
-                $command->description,
-                $command->skills['testing_systems'],
-                $command->skills['reporting_systems'],
-                $command->skills['has_selenium_knowledge']
-            ),
-            JobPosition::ProjectManager->value => new ProjectManager(
-                $command->userId,
-                $command->firstName,
-                $command->lastName,
-                $command->email,
-                $command->jobPosition,
-                $command->description,
-                $command->skills['project_methodologies'],
-                $command->skills['reporting_systems'],
-                $command->skills['has_scrum_knowledge']
-            )
+            JobPosition::Developer->value => Developer::createFromCommand($command),
+            JobPosition::Tester->value => Tester::createFromCommand($command),
+            JobPosition::ProjectManager->value => ProjectManager::createFromCommand($command)
         };
     }
 }

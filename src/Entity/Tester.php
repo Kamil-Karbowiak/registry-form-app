@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Command\CreateUser;
 use App\Command\UpdateUser;
 use App\Repository\TesterRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -54,12 +55,27 @@ class Tester extends User
         ! isset($command->skills['has_selenium_knowledge']) ?: $this->hasSeleniumKnowledge = $command->skills['has_selenium_knowledge'];
     }
 
+    public static function createFromCommand(CreateUser $command): self
+    {
+        return new self(
+            $command->userId,
+            $command->firstName,
+            $command->lastName,
+            $command->email,
+            $command->jobPosition,
+            $command->description,
+            $command->skills['testing_systems'],
+            $command->skills['reporting_systems'],
+            $command->skills['has_selenium_knowledge']
+        );
+    }
+
     public function getSkills(): iterable
     {
         return [
             'testing_systems' => $this->testingSystems,
             'reporting_systems' => $this->reportingSystems,
-            'has_selenium_knowledge' => $this->hasSeleniumKnowledge
+            'has_selenium_knowledge' => $this->hasSeleniumKnowledge,
         ];
     }
 

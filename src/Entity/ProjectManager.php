@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Command\CreateUser;
 use App\Command\UpdateUser;
 use App\Repository\ProjectManagerRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -54,12 +55,27 @@ class ProjectManager extends User
         ! isset($command->skills['has_scrum_knowledge']) ?: $this->hasScrumKnowledge = $command->skills['has_scrum_knowledge'];
     }
 
+    public static function createFromCommand(CreateUser $command): self
+    {
+        return new self(
+            $command->userId,
+            $command->firstName,
+            $command->lastName,
+            $command->email,
+            $command->jobPosition,
+            $command->description,
+            $command->skills['project_methodologies'],
+            $command->skills['reporting_systems'],
+            $command->skills['has_scrum_knowledge']
+        );
+    }
+
     public function getSkills(): iterable
     {
         return [
             'project_methodologies' => $this->projectMethodologies,
             'reporting_systems' => $this->reportingSystems,
-            'has_scrum_knowledge' => $this->hasScrumKnowledge
+            'has_scrum_knowledge' => $this->hasScrumKnowledge,
         ];
     }
 

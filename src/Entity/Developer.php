@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Command\CreateUser;
 use App\Command\UpdateUser;
 use App\Repository\DeveloperRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -51,7 +52,22 @@ class Developer extends User
         ! isset($command->description) ?: $this->description = $command->description;
         ! isset($command->skills['integrated_development_environments']) ?: $this->integratedDevelopmentEnvironments = $command->skills['integrated_development_environments'];
         ! isset($command->skills['programming_languages']) ?: $this->programmingLanguages = $command->skills['programming_languages'];
-        ! isset($command->skills['has_mysql_knowledge']) ?: $this->hasMySQLknowledge = $command->skills['has_mysql_knowledge'];
+        ! isset($command->skills['has_mysql_knowledge']) ?: $this->hasMysqlKnowledge = $command->skills['has_mysql_knowledge'];
+    }
+
+    public static function createFromCommand(CreateUser $command): self
+    {
+        return new self(
+            $command->userId,
+            $command->firstName,
+            $command->lastName,
+            $command->email,
+            $command->jobPosition,
+            $command->description,
+            $command->skills['integrated_development_environments'],
+            $command->skills['programming_languages'],
+            $command->skills['has_mysql_knowledge']
+        );
     }
 
     public function getSkills(): iterable
@@ -59,7 +75,7 @@ class Developer extends User
         return [
             'integrated_development_environments' => $this->integratedDevelopmentEnvironments,
             'programming_languages' => $this->programmingLanguages,
-            'has_mysql_knowledge' => $this->hasMysqlKnowledge
+            'has_mysql_knowledge' => $this->hasMysqlKnowledge,
         ];
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security;
 
 use App\Entity\User;
@@ -18,8 +20,8 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 class ApiTokenAuthenticator extends AbstractAuthenticator
 {
     public function __construct(
-        private readonly UserRepository $userRepository)
-    {
+        private readonly UserRepository $userRepository
+    ) {
     }
 
     /**
@@ -35,16 +37,16 @@ class ApiTokenAuthenticator extends AbstractAuthenticator
     public function authenticate(Request $request): Passport
     {
         $apiToken = $request->headers->get('authorization');
-        if (null === $apiToken) {
+        if ($apiToken === null) {
             // The token header was empty, authentication fails with HTTP Status
             // Code 401 "Unauthorized"
             throw new CustomUserMessageAuthenticationException('No API token provided');
         }
 
-        $trimmedToken = str_replace("Bearer ", "", $apiToken);
+        $trimmedToken = str_replace('Bearer ', '', $apiToken);
         /** @var User $user */
         $user = $this->userRepository->findOneByToken($trimmedToken);
-        $userIdentifier = !empty($user) ? $user->getUserIdentifier() : "";
+        $userIdentifier = ! empty($user) ? $user->getUserIdentifier() : '';
 
         return new SelfValidatingPassport(new UserBadge($userIdentifier));
     }
@@ -59,7 +61,7 @@ class ApiTokenAuthenticator extends AbstractAuthenticator
     {
         $data = [
             // you may want to customize or obfuscate the message first
-            'message' => strtr($exception->getMessageKey(), $exception->getMessageData())
+            'message' => strtr($exception->getMessageKey(), $exception->getMessageData()),
 
             // or to translate this message
             // $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())

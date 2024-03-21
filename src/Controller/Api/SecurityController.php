@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Api;
 
 use App\Entity\User;
@@ -14,28 +16,27 @@ use Symfony\Component\String\ByteString;
 class SecurityController extends AbstractController
 {
     public function __construct(
-        private readonly EntityManagerInterface $entityManager)
-    {
+        private readonly EntityManagerInterface $entityManager
+    ) {
     }
 
     #[Route('/api/login', name: 'api_login', methods: ['POST'])]
     public function index(#[CurrentUser] ?User $user): Response
     {
-        if (null === $user) {
+        if ($user === null) {
             return $this->json([
-                'message' => 'missing credentials'
+                'message' => 'missing credentials',
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        // w "prawdziwej" aplikacji przeznaczonej do zastosowania zewnętrznego,
-        // lepiej stosować bezpieczniejsze sposoby na generowanie tokenów ;)
+        // dla celów mikro projektu
         $token = ByteString::fromRandom(20);
 
         $user->setToken($token);
         $this->entityManager->flush();
 
         return new JsonResponse([
-            'user'  => $user->getUserIdentifier(),
+            'user' => $user->getUserIdentifier(),
             'token' => $token,
         ]);
     }

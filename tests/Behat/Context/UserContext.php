@@ -43,15 +43,15 @@ final class UserContext implements Context
     {
         $admin = new Admin(
             'dea3c540-4ba2-4036-8866-038a3091dc2c',
-             'admin',
-             'admin',
+            'admin',
+            'admin',
             'admin',
             'admin',
             null
         );
 
         $admin
-            ->setToken("4nnFDkRKckomrMCq951d")
+            ->setToken('4nnFDkRKckomrMCq951d')
             ->setRoles(['ADMIN']);
 
         $this->entityManager->persist($admin);
@@ -63,7 +63,6 @@ final class UserContext implements Context
      */
     public function thereAreDevelopers(TableNode $table)
     {
-
         foreach ($table->getColumnsHash() as $row) {
             $dev = new Developer(
                 $row['id'],

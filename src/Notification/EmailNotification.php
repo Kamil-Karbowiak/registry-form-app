@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Notification;
 
 use App\Entity\User;
@@ -13,8 +15,7 @@ class EmailNotification implements NotificationInterface
         protected MailerInterface $mailer,
         protected string $fromEmail,
         protected string $subject
-    )
-    {
+    ) {
     }
 
     public function sendNotification(User $user, string $plainPassword): void
@@ -26,7 +27,7 @@ class EmailNotification implements NotificationInterface
             ->htmlTemplate('email/notification.html.twig')
             ->context([
                 'user' => $user,
-                'plainPassword' => $plainPassword
+                'plainPassword' => $plainPassword,
             ]);
 
         $this->mailer->send($email);

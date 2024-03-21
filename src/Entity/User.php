@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Attribute\Ignore;
     'developer' => Developer::class,
     'project-manager' => ProjectManager::class,
     'tester' => Tester::class,
-    'admin' => Admin::class
+    'admin' => Admin::class,
 ])]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
